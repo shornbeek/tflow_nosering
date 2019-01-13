@@ -14,6 +14,14 @@ let early = 0;
 let earlx = 0;
 let earry = 0;
 let earrx = 0;
+
+var imgl;
+var imgr;
+var bg;
+var bgb;
+var offset = 0;
+var easing = 0.05;
+var noseglass;
  
 function setup() {
   createCanvas(1640, 1480);
@@ -22,8 +30,18 @@ function setup() {
   console.log(ml5);
   poseNet = ml5.poseNet(video, modelReady);
   poseNet.on('pose', gotPoses);
-  // img = loadImage("https://buzzghana.com/wp-content/uploads/2017/11/atubiga.jpg"); 
+ 
 
+  bg = loadImage("https://i.ibb.co/r7QSPMx/frontarrow.png");
+  bgb = loadImage("https://i.ibb.co/c33bS87/backarrow.png");
+  imgl = loadImage("https://i.ibb.co/dcmp87t/glassl.png");
+  imgr = loadImage("https://i.ibb.co/PDcwcnC/glassr.png"); 
+
+  noseglass = loadImage("https://i.ibb.co/HzWkzDb/teeth.png");
+
+
+
+  // img.hide(imgl, imgr);
 }
 
 function gotPoses(poses) {
@@ -41,8 +59,8 @@ function gotPoses(poses) {
     let ery = poses[0].pose.keypoints[4].position.x;
     let erx = poses[0].pose.keypoints[4].position.y;
 
-    noseX = lerp(noseX, nX, 0.8);
-    noseY = lerp(noseY, nY, 0.4);
+    noseX = lerp(noseX, nX,  0.8);
+    noseY = lerp(noseY, nY,  0.4);
     eyelX = lerp(eyelX, eX, 0.8);
     eyelY = lerp(eyelY, eY, 0.4);
     eyelXa = lerp(eyelX, eXa, 0.8);
@@ -60,25 +78,37 @@ function modelReady() {
 }
 
 function draw() {
-  // image(img, 0, 0); 
+  image(imgl, 0, 0, height/2, );
+ 
+ 
+  image(bg, early, earlx, 105, 105);
+  image(imgr,  0, 0); // Display at full opacity
   image(video, 0, 0);
-  
   let d = dist(noseX, noseY, eyelX, eyelY);
   // let dis = dist(early, earlx, eyelX, eyelY)
 
   stroke(255, 255, 255);
   ellipse(noseX, noseY, 5, 5, d);
+  // image(noseglass, noseX, noseY, d );
   stroke(127, 63, 120);
-  ellipse(eyelX, eyelY, 50);
+  image(imgr, eyelX, eyelY, 105, 105, );
 
-  fill(0,0,255).tint(255, 127);
-  ellipse(eyelXa, eyelYa, 50);
-  ellipse(eyelXa, eyelYa, 50);
-   
-  line(eyelXa, eyelYa, eyelX, eyelY, 0, 20, 0, 20);
+  image(imgl, eyelXa, eyelYa, -105, 105, );
+  
+  // image(imgl, 50, 50,  eyelXa, eyelYa, 30);
+    // line( 50, 50,  eyelXa, eyelYa);
+    // rect( eyelYa, eyelY, 20, 5, 20, 5);
+    
 
-  ellipse(early, earlx, 20);
-  ellipse(earry, earrx, 20);
+  // image(img, eyelXa, 150, 350, eyelYa, eyelX, eyelY);
+  image(bg, early, earlx, 105, 105);
+  // image(bgb, early, earlx, 20);
+  image(bgb, earry, earrx, -105, 105);
+
+  // background(bg);
+  
+
+
  
 
 }
